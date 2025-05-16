@@ -17,6 +17,8 @@ public class SecurityConfig {
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
                 .authorizeHttpRequests(authorize -> {
+                    authorize.requestMatchers(HttpMethod.GET, "/public/resource").permitAll();
+                    authorize.requestMatchers(HttpMethod.GET, "/private/write/resource").hasAuthority("SCOPE_write");
                     authorize.anyRequest().authenticated();
                 })
                 .oauth2ResourceServer(oauth ->
